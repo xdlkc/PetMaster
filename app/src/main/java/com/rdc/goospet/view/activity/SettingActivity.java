@@ -63,6 +63,7 @@ public class SettingActivity extends AppCompatActivity implements CompoundButton
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         switch (compoundButton.getId()){
             case R.id.msg_swh:
+
                 break;
             case R.id.qq_swh:
                 break;

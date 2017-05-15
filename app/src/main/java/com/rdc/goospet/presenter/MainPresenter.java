@@ -34,10 +34,11 @@ public class MainPresenter extends BasePresenter<MainVInterface> {
      * @return
      */
     public RVMainAdapter getRVAdapter(final Context context) {
-        RVMainAdapter adapter = new RVMainAdapter(context, mModel.getPetData());
+        final RVMainAdapter adapter = new RVMainAdapter(context, mModel.getPetData());
         adapter.setOnRvItemClickListener(new RVMainAdapter.OnRvItemClickListener() {
             @Override
             public void onItemClick(View view, PetInfo petInfo) {
+
                 ToastUtil.showToast(context, "介绍:" + petInfo.getName() + "\n" + petInfo.getDescription());
             }
         });
@@ -50,16 +51,17 @@ public class MainPresenter extends BasePresenter<MainVInterface> {
                     view.launchDesktopPet();
                 }
                 switch (petId) {
-                    case AppConstants.PET_BIRD:
-                        break;
-                    case AppConstants.PET_COW:
-                        break;
-                    case AppConstants.PET_PIG:
-                        break;
-                    case AppConstants.PET_OWL:
-                        break;
-                    default:
-                        break;
+                        case AppConstants.PET_BIRD:
+
+                            break;
+                        case AppConstants.PET_COW:
+                            break;
+                        case AppConstants.PET_PIG:
+                            break;
+                        case AppConstants.PET_OWL:
+                            break;
+                        default:
+                            break;
                 }
             }
         });

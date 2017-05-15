@@ -24,7 +24,6 @@ import com.rdc.goospet.view.vinterface.MainVInterface;
  */
 public class MainActivity extends BaseActivity<MainVInterface, MainPresenter> implements MainVInterface, View.OnClickListener {
 
-
     private RecyclerView mRvMain;
     private FloatingActionButton mFABSetting;
 
