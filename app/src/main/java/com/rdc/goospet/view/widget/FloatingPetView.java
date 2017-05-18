@@ -44,7 +44,7 @@ public class FloatingPetView extends LinearLayout {
     /**
      * 悬浮窗Iv
      */
-    private ImageView mIvPet;
+    public static ImageView mIvPet;
 
     /**
      * 位置参数

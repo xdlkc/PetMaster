@@ -1,5 +1,6 @@
 package com.rdc.goospet.presenter;
 
+import android.app.Service;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -11,6 +12,7 @@ import com.rdc.goospet.base.BasePresenter;
 import com.rdc.goospet.entity.PetInfo;
 import com.rdc.goospet.model.MainModel;
 import com.rdc.goospet.model.minterface.MainMInterface;
+import com.rdc.goospet.service.FloatingPetService;
 import com.rdc.goospet.utils.AppConstants;
 import com.rdc.goospet.utils.ToastUtil;
 import com.rdc.goospet.view.vinterface.MainVInterface;
@@ -47,8 +49,13 @@ public class MainPresenter extends BasePresenter<MainVInterface> {
             @Override
             public void onPetSelected(CompoundButton buttonView, int petId) {
                 boolean isCheck = buttonView.isChecked();
+                /*
+                宠物模型开关
+                 */
                 if (isCheck) {
                     view.launchDesktopPet();
+                }else {
+                    
                 }
                 switch (petId) {
                         case AppConstants.PET_BIRD:

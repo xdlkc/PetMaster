@@ -1,20 +1,29 @@
 package com.rdc.goospet.view.activity;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.provider.Settings;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Toast;
 
 import com.rdc.goospet.R;
 import com.rdc.goospet.adapter.RVMainAdapter;
 import com.rdc.goospet.base.BaseActivity;
 import com.rdc.goospet.listener.HidingScrollListener;
 import com.rdc.goospet.presenter.MainPresenter;
+import com.rdc.goospet.receiver.ComeWxMessage;
+import com.rdc.goospet.receiver.MyMessage;
 import com.rdc.goospet.service.FloatingPetService;
 import com.rdc.goospet.utils.DimenUtils;
 import com.rdc.goospet.view.vinterface.MainVInterface;
@@ -22,10 +31,15 @@ import com.rdc.goospet.view.vinterface.MainVInterface;
 /**
  * 主界面
  */
-public class MainActivity extends BaseActivity<MainVInterface, MainPresenter> implements MainVInterface, View.OnClickListener {
+public class MainActivity extends BaseActivity<MainVInterface, MainPresenter> implements MainVInterface, View.OnClickListener, MyMessage{
 
+    private ComeWxMessage comeWxMessage;
+    private MyMessage myMessage;
     private RecyclerView mRvMain;
     private FloatingActionButton mFABSetting;
+
+    boolean isFirstIn = false;
+
 
     @Override
     protected MainPresenter createPresenter() {
@@ -47,6 +61,87 @@ public class MainActivity extends BaseActivity<MainVInterface, MainPresenter> im
         findAllViewById();
         initRv();
         mFABSetting.setOnClickListener(this);
+        myMessage=new MainActivity();
+        comeWxMessage=new ComeWxMessage(myMessage,this);
+        comeWxMessage.toggleNotificationListenerService();
+        comeWxMessage.openSetting();
+
+//        toggleNotificationListenerService();
+//        openSetting();
+//        SharedPreferences preferences = getSharedPreferences("first_pref",MODE_PRIVATE);
+//        SharedPreferences.Editor editor = preferences.edit();
+//        editor.putBoolean("isFirstIn",false);
+//        editor.commit();
+    }
+
+    @Override
+    public void comePhone() {
+        Log.e("AAA","====回调中，收到来电===");
+        //这里写调用让宠物换图标的方法
+    }
+
+    @Override
+    public void comeShortMessage() {
+        Log.e("AAA","====回调中，收到短信消息===");
+        //这里写调用让宠物换图标的方法
+    }
+
+    @Override
+    public void comeWxMessage() {
+        Log.e("AAA","====回调中，收到微信消息===");
+        //这里写调用让宠物换图标的方法
+
+    }
+
+    @Override
+    public void comeQQmessage() {
+        Log.e("AAA","====回调中，收到QQ消息===");
+        //这里写调用让宠物换图标的方法
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        comeWxMessage.unRegistBroadcast();
+    }
+
+    public void openSetting(){
+        if (!isEnabled()) {
+            Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "已开启服务权限", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private boolean isEnabled() {
+        String pkgName = getPackageName();
+        final String flat = Settings.Secure.getString(this.getContentResolver(),
+                "enabled_notification_listeners");
+        if (!TextUtils.isEmpty(flat)) {
+            final String[] names = flat.split(":");
+            for (int i = 0; i < names.length; i++) {
+                final ComponentName cn = ComponentName.unflattenFromString(names[i]);
+                if (cn != null) {
+                    if (TextUtils.equals(pkgName, cn.getPackageName())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public void toggleNotificationListenerService() {
+        PackageManager pm =  getPackageManager();
+        pm.setComponentEnabledSetting(
+                new ComponentName(this,com.rdc.goospet.receiver.NotifyService.class),
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+/*
+        pm.setComponentEnabledSetting(
+                new ComponentName(this,com.rdc.goospet.receiver.NotifyService.class),
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);*/
     }
 
     /**
@@ -115,12 +210,6 @@ public class MainActivity extends BaseActivity<MainVInterface, MainPresenter> im
 //                startActivity(home);
 //                break;
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-//        stopService();
-        super.onDestroy();
     }
 
     @Override

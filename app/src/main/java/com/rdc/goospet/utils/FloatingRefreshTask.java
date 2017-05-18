@@ -41,5 +41,7 @@ public class FloatingRefreshTask extends TimerTask {
         if (FloatingUtils.isHome(mActivityManager, mPackageManager) && FloatingPetManager.isFloatingWindowShowing()) {
 
         }
+
+
     }
 }

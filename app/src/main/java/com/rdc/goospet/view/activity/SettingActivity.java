@@ -1,5 +1,6 @@
 package com.rdc.goospet.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -20,7 +22,7 @@ import com.rdc.goospet.view.vinterface.SettingVInterface;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener{
+public class SettingActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener{
     private List<String> list2 = new ArrayList<>();
     private ArrayAdapter<String> sizeApapter;
     private EditText nameEdt;
@@ -28,6 +30,7 @@ public class SettingActivity extends AppCompatActivity implements CompoundButton
     private SwitchCompat wechatSwh;
     private SwitchCompat qqSwh;
     private SwitchCompat msgSwh;
+    private Button alarmButton;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,12 +41,13 @@ public class SettingActivity extends AppCompatActivity implements CompoundButton
         wechatSwh = (SwitchCompat) findViewById(R.id.wechat_swh);
         qqSwh = (SwitchCompat) findViewById(R.id.qq_swh);
         msgSwh = (SwitchCompat) findViewById(R.id.msg_swh);
-
+        alarmButton = (Button) findViewById(R.id.alarm_btn);
+        alarmButton.setOnClickListener(this);
 
         list2.add("正常");
         list2.add("稍大");
         list2.add("稍小");
-        sizeApapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,list2);
+        sizeApapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,list2);
         sizeApapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         sizeSpn.setAdapter(sizeApapter);
         sizeSpn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -71,6 +75,15 @@ public class SettingActivity extends AppCompatActivity implements CompoundButton
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.alarm_btn:
+                Intent intent = new Intent(SettingActivity.this, AlarmActivity.class);
+                startActivity(intent);
         }
     }
 }
